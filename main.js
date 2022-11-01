@@ -3,20 +3,28 @@ const github = require("@actions/github");
 const _ = require("lodash");
 
 const token = core.getInput("token");
-core.getState;
+
 const octokit = github.getOctokit(token);
 octokit.rest.actions
   .listArtifactsForRepo({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
   })
-  .then(({data}) => {
-    core.info(github.context.repo.owner);
-    core.info(github.context.repo.repo);
-    core.info(_.keys(data));
-    core.info(data);
-    core.info(data.artifacts);
-    _.each(data.artifacts, (i) => {
-      core.info(`${i.name}-${i.expires_at}`);
-    });
+  .then(({ data }) => {
+    const artifacts = _.chain(data.artifacts)
+      .sortBy((i) => new Date(i.expires_at))
+      .dropRight()
+      .each((i) => {
+        octokit.rest.actions
+          .deleteArtifact({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            artifact_id: i.id,
+          })
+          .then(() => {
+            core.info(`deleted ${i.id}-${i.name}`);
+          });
+      })
+      .value();
+    artifacts;
   });
