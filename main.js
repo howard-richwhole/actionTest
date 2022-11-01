@@ -10,10 +10,12 @@ octokit.rest.actions
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
   })
-  .then((data) => {
+  .then(({data}) => {
     core.info(github.context.repo.owner);
     core.info(github.context.repo.repo);
     core.info(_.keys(data));
+    core.info(data);
+    core.info(data.artifacts);
     _.each(data.artifacts, (i) => {
       core.info(`${i.name}-${i.expires_at}`);
     });
