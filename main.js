@@ -1,6 +1,6 @@
-import core from "@actions/core";
-import github from "@actions/github";
-import _ from "lodash";
+const core = require("@actions/core");
+const github = require("@actions/github");
+const _ = require("lodash");
 
 const octokit = github.getOctokit();
 octokit.rest.actions.listArtifactsForRepo().then((data) => {
