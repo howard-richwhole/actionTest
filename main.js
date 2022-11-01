@@ -13,6 +13,9 @@ octokit.rest.actions
   .then(({ data }) => {
     const artifacts = _.chain(data.artifacts)
       .sortBy((i) => new Date(i.expires_at))
+      .each(i=>{
+        core.info(`{id:${i.id},name:${i.name},expires_at:${i.expires_at}}`);
+      })
       .dropRight()
       .each((i) => {
         octokit.rest.actions
@@ -26,5 +29,7 @@ octokit.rest.actions
           });
       })
       .value();
-    artifacts;
+    if(!_.size(artifacts)){
+      core.info('nothing delete');
+    }
   });
