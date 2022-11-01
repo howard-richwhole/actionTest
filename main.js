@@ -6,7 +6,7 @@ const token = core.getInput('token');
 core.getState
 const octokit = github.getOctokit(token);
 octokit.rest.actions.listArtifactsForRepo({owner:github.context.repo.owner ,repo:github.context.repo.repo}).then((data) => {
-  core.info(`show:${data.artifacts.length}`)
+  core.info(data.artifacts)
   _.each(data.artifacts, (i) => {
     core.info(`${i.name}-${i.expires_at}`);
   });
