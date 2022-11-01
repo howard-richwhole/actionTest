@@ -13,8 +13,7 @@ octokit.rest.actions
   .then((data) => {
     core.info(github.context.repo.owner);
     core.info(github.context.repo.repo);
-    core.info(_.chunk(token,2))
-    core.info(data);
+    core.info(_.keys(data));
     _.each(data.artifacts, (i) => {
       core.info(`${i.name}-${i.expires_at}`);
     });
